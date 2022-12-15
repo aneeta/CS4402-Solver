@@ -53,6 +53,7 @@ public class ForwardChecking {
     public void forwardChecking() {
         if (assignmentComplete()) {
             printSolution();
+            // TODO don't traverse the whole search tree, stop after frist solution found
             return;
         }
         // select variable from varList (based on a heuristic?)
@@ -84,13 +85,14 @@ public class ForwardChecking {
 
     public void branchRight(Variable var, int val) {
         searchNodeCount++;
+        List<Integer> currentVarDomain = var.getDomain();
         // remove value that didn't work out on the left branch
         var.pruneDomain(val);
         if (var.getDomain().size() > 0) {
             checkAndPrune(var);
         }
         // restore value (no solution found down the branch)
-        var.setDomain(new ArrayList<>(List.of(val)));
+        var.setDomain(currentVarDomain);
     }
 
     public void checkAndPrune(Variable var) {
