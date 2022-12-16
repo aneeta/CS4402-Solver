@@ -4,8 +4,11 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.TreeMap;
+import java.util.stream.Collectors;
 
 import csp.binary.BinaryCSP;
+import models.Solution;
 import models.Variable;
 import solver.heuristics.value.ValueHeuristic;
 import solver.heuristics.variable.VariableHeuristic;
@@ -13,22 +16,27 @@ import solver.heuristics.variable.VariableHeuristic;
 public class Algorithm {
     List<Variable> unassignedVarList;
     VariableHeuristic varOrdering;
-    ValueHeuristic valOrdering; // val ordering always ascending
+    ValueHeuristic valOrdering;
     Map<Integer, Integer> assignments;
     int searchNodeCount;
     int arcRevisions;
     BinaryCSP csp;
-    boolean solutionFound;
+    List<Solution> solutions;
+    boolean allSolutions;
+    List<Variable> allVarList;
 
-    public Algorithm(VariableHeuristic varOrdering, ValueHeuristic valOrdering, BinaryCSP csp) {
+    public Algorithm(VariableHeuristic varOrdering, ValueHeuristic valOrdering, BinaryCSP csp, boolean allSolutions) {
         this.varOrdering = varOrdering;
         this.valOrdering = valOrdering;
         this.csp = csp;
+        this.allSolutions = allSolutions;
         this.unassignedVarList = toVariableList(csp);
         this.assignments = new HashMap<>();
         this.searchNodeCount = 0;
         this.arcRevisions = 0;
-        this.solutionFound = false;
+        this.solutions = new ArrayList<>();
+        allVarList = new ArrayList<>();
+        allVarList.addAll(unassignedVarList);
     }
 
     public List<Variable> toVariableList(BinaryCSP csp) {
@@ -53,21 +61,31 @@ public class Algorithm {
 
     public Variable getNextVar() {
         return varOrdering.getNext(unassignedVarList);
-
     }
 
-    public void printSolution() {
-        // String arcAndNodes = String.format("%d\n%d\n", arcRevisions,
-        // searchNodeCount);
+    public void printSolution(int i) {
+        Solution sol = solutions.get(i);
 
-        System.out.println(searchNodeCount);
-        System.out.println(arcRevisions);
-        for (Integer i : assignments.values()) {
-            System.out.println(i);
+        System.out.println(sol.getSearchNodeCount());
+        System.out.println(sol.getArcRevisions());
+        for (Integer j : sol.getAssignments().values()) {
+            System.out.println(j);
         }
+    }
+
+    public void saveSolution(int nodes, int arcs, Map<Integer, Integer> assignments) {
+        Map<Integer, Integer> copyAssignments = new TreeMap<>();
+        copyAssignments.putAll(assignments);
+        solutions.add(new Solution(nodes, arcs, copyAssignments));
     }
 
     public boolean solve() {
         return false;
+
+    }
+
+    public Variable getVariable(int idx) {
+        return allVarList.stream().filter(x -> x.getIndex() == idx).collect(Collectors.toList()).get(0);
+
     }
 }
