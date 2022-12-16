@@ -11,48 +11,28 @@ import csp.binary.BinaryTuple;
 import csp.binary.BinaryConstraint;
 import models.Arc;
 import models.Variable;
-import solver.Algorithm;
-import solver.Heuristic;
+import solver.heuristics.value.ValueHeuristic;
+import solver.heuristics.variable.VariableHeuristic;
 
-public class MaintainingArcConsistency {
-    private List<Variable> unassignedVarList;
-    private Heuristic varOrdering, valOrdering; // val ordering always ascending
-    private Map<Integer, Integer> assignments;
-    private int searchNodeCount;
-    private int arcRevisions;
-    private BinaryCSP csp;
-    private boolean solutionFound;
+public class MaintainingArcConsistency extends Algorithm {
 
-    public List<Variable> toVariableList(BinaryCSP csp) {
-        List<Variable> varList = new ArrayList<>();
-        for (int i = 0; i < csp.getNumberVariables(); i++) {
-            List<Integer> domain = new ArrayList<>();
-            for (int j = csp.getLB(i); j <= csp.getUB(i); j++) {
-                domain.add(j);
-            }
-            varList.add(new Variable(i, domain, csp));
-        }
-        return varList;
+    public MaintainingArcConsistency(VariableHeuristic varOrdering, ValueHeuristic valOrdering, BinaryCSP csp) {
+        super(varOrdering, valOrdering, csp);
     }
 
-    public MaintainingArcConsistency(Heuristic varOrdering, Heuristic valOrdering, BinaryCSP csp) {
-        this.varOrdering = varOrdering;
-        this.valOrdering = valOrdering;
-        this.csp = csp;
-        this.searchNodeCount = 0;
-        this.arcRevisions = 0;
-        this.assignments = new HashMap();
-        this.unassignedVarList = toVariableList(csp);
-        this.solutionFound = false;
-    }
-
-    public void solve() {
+    @Override
+    public boolean solve() {
         // arc consistency enforced
         if (AC3()) {
             maintainingArcConsistency();
         } else {
             System.out.println("Problem not arc consistent!");
+            return false;
         }
+        if (assignmentComplete()) {
+            return true;
+        }
+        return false;
     }
 
     public Variable getVariable(int idx) {
@@ -62,7 +42,6 @@ public class MaintainingArcConsistency {
     }
 
     public boolean AC3() {
-
         List<Arc> queue = getQueue();
         // if (queue.size() <= 0) {
         // // TODO
@@ -78,6 +57,7 @@ public class MaintainingArcConsistency {
                 }
                 for (int i : var1.getIndicesNeighbours()) {
                     if (i != arc.getVar2()) {
+                        // TODO should be if arc not there already
                         queue.add(new Arc(i, arc.getVar1()));
                     }
                 }
@@ -93,10 +73,14 @@ public class MaintainingArcConsistency {
         boolean revised = false;
         Variable var1 = getVariable(arc.getVar1());
         Variable var2 = getVariable(arc.getVar2());
-        List<Integer> domainVar1 = new ArrayList();
+        List<Integer> domainVar1 = new ArrayList<>();
+        List<Integer> domainVar2 = new ArrayList<>();
+
         domainVar1.addAll(var1.getDomain());
+        domainVar2.addAll(var2.getDomain());
         for (int i : domainVar1) {
             boolean existsY = false;
+
             for (BinaryConstraint bc : csp.getConstraints(arc.getVar1(), arc.getVar2())) {
                 for (BinaryTuple bt : bc.getTuples()) {
                     if (bt.getFirstVal() == i) {
@@ -148,9 +132,9 @@ public class MaintainingArcConsistency {
         // select variable from varList (based on a heuristic?)
         Variable nextVar = getNextVar();
         // select value from var domain
-        int nextVal = nextVar.getNextVal();
+        int nextVal = nextVar.getNextVal(valOrdering);
         branchLeft(nextVar, nextVal);
-        
+
         branchRight(nextVar, nextVal);
         // }
         // else inconsistent
@@ -223,7 +207,7 @@ public class MaintainingArcConsistency {
     }
 
     public void checkAndPrune(Variable var) {
-        Map<Integer, List<Integer>> currentDomains = new HashMap();
+        Map<Integer, List<Integer>> currentDomains = new HashMap<>();
         for (Variable v : unassignedVarList) {
             currentDomains.put(v.getIndex(), v.getDomain());
         }
@@ -236,27 +220,8 @@ public class MaintainingArcConsistency {
         }
     }
 
-    public boolean assignmentComplete() {
-        // check if any unassigned values are left
-        if (this.assignments.size() == csp.getNumberVariables()) {
-            return true;
-        }
-        return false;
-    }
-
-    public Variable getNextVar() {
-        return varOrdering.getNext(unassignedVarList);
-
-    }
-
-    //
-    public void printSolution() {
-        // String arcAndNodes = String.format("%d\n%d\n", arcRevisions,
-        // searchNodeCount);
-        System.out.println(arcRevisions);
-        System.out.println(searchNodeCount);
-        for (Integer i : assignments.values()) {
-            System.out.println(i);
-        }
-    }
 }
+
+ 
+
+    
