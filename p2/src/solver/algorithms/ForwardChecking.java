@@ -12,24 +12,26 @@ import solver.heuristics.variable.VariableHeuristic;
 
 public class ForwardChecking extends Algorithm {
 
-    public ForwardChecking(VariableHeuristic varOrdering, ValueHeuristic valOrdering, BinaryCSP csp) {
-        super(varOrdering, valOrdering, csp);
+    public ForwardChecking(VariableHeuristic varOrdering, ValueHeuristic valOrdering, BinaryCSP csp,
+            boolean allSolutions) {
+        super(varOrdering, valOrdering, csp, allSolutions);
     }
 
     @Override
     public boolean solve() {
         forwardChecking();
-        if (assignmentComplete()) {
-            printSolution();
+        if (solutions.size() > 0) {
+            printSolution(0);
             return true;
         }
+        System.out.println(searchNodeCount);
+        System.out.println(arcRevisions);
         return false;
     }
 
     public void forwardChecking() {
         if (assignmentComplete()) {
-            // printSolution();
-            // TODO don't traverse the whole search tree, stop after frist solution found
+            saveSolution(searchNodeCount, arcRevisions, assignments);
             return;
         }
         // select variable from varList (based on a heuristic?)
@@ -37,14 +39,10 @@ public class ForwardChecking extends Algorithm {
         // select value from var domain
         int nextVal = nextVar.getNextVal(valOrdering);
         branchLeft(nextVar, nextVal);
-        if (assignmentComplete()) {
+        if (solutions.size() > 0 && !allSolutions) {
             return;
         }
         branchRight(nextVar, nextVal);
-    }
-
-    public void checkComplete() {
-
     }
 
     public void branchLeft(Variable var, int val) { // true if solution found
@@ -53,18 +51,19 @@ public class ForwardChecking extends Algorithm {
         assignments.put(var.getIndex(), val);
         unassignedVarList.remove(var);
 
-        List<Integer> currentVarDomain = var.getDomain(); //TODO maybe do a copy instead of pointer??
-        // restrict domain
+        List<Integer> currentVarDomain = new ArrayList<>();
+        currentVarDomain.addAll(var.getDomain());
+        // restrict domain (prune)
         var.setDomain(new ArrayList<>(List.of(val)));
 
         checkAndPrune(var);
 
-        // dont reset if finished
-        if (assignmentComplete()) {
+        if (solutions.size() > 0 && !allSolutions) {
+            // ending search after first found solution
             return;
         }
 
-        // reset domain
+        // reset domain (undo pruning)
         var.setDomain(currentVarDomain);
         // unassign value (no solution found down the branch)
         assignments.remove(var.getIndex());
@@ -73,7 +72,8 @@ public class ForwardChecking extends Algorithm {
 
     public void branchRight(Variable var, int val) { // true if solution found
         searchNodeCount++;
-        List<Integer> currentVarDomain = var.getDomain();
+        List<Integer> currentVarDomain = new ArrayList<>();
+        currentVarDomain.addAll(var.getDomain());
         // remove value that didn't work out on the left branch
         var.pruneDomain(val);
         if (var.getDomain().size() > 0) {
@@ -87,7 +87,7 @@ public class ForwardChecking extends Algorithm {
         Map<Integer, List<Integer>> currentDomains = new HashMap<>();
         if (reviseFutureArcs(var)) {
             for (Variable v : unassignedVarList) {
-                if (!v.equals(var)) {
+                if (var.getIndicesNeighbours().contains(v.getIndex())) {
                     currentDomains.put(v.getIndex(), v.getDomain());
                     // prune domain
                     List<Integer> newDomain = var.getPrunedDomain(v);
@@ -101,14 +101,17 @@ public class ForwardChecking extends Algorithm {
         }
         // unprune domain
         for (Variable v : unassignedVarList) {
-            v.setDomain(currentDomains.get(v.getIndex()));
+            if (var.getIndicesNeighbours().contains(v.getIndex())) {
+                v.setDomain(currentDomains.get(v.getIndex()));
+            }
         }
     }
 
     public boolean reviseFutureArcs(Variable var) {
         arcRevisions++;
         for (Variable v : unassignedVarList) {
-            if (!v.equals(var)) { // shouldn't be there anyway
+            // only neighbouring (connected indiced)
+            if (var.getIndicesNeighbours().contains(v.getIndex())) {
                 boolean consistent = var.checkArcConsistency(v);
                 if (!consistent) {
                     return false;
@@ -118,5 +121,4 @@ public class ForwardChecking extends Algorithm {
         return true;
     }
 
-    
 }
