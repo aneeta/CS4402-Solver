@@ -10,6 +10,7 @@ import java.util.Set;
 import csp.binary.BinaryCSP;
 import csp.binary.BinaryConstraint;
 import csp.binary.BinaryTuple;
+import solver.heuristics.value.ValueHeuristic;
 
 public class Variable {
     private int index;
@@ -113,8 +114,9 @@ public class Variable {
         this.csp = csp;
     }
 
-    public int getNextVal() {
+    public int getNextVal(ValueHeuristic valOrdering) {
         return Collections.min(domain);
+        // return valOrdering.getNext(domain);
     }
 
 }
