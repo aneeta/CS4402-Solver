@@ -1,14 +1,15 @@
 package solver;
 
 import csp.binary.BinaryCSP;
+import solver.algorithms.Algorithm;
 
 public class Solver {
 
     BinaryCSP csp;
     Algorithm alg;
-    Heuristic heuristic;
+    VariableHeuristic heuristic;
 
-    public Solver(BinaryCSP csp, Algorithm alg, Heuristic heuristic) {
+    public Solver(BinaryCSP csp, Algorithm alg, VariableHeuristic heuristic) {
 
     }
 

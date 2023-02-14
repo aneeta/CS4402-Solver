@@ -7,44 +7,20 @@ import java.util.Map;
 
 import csp.binary.BinaryCSP;
 import models.Variable;
-import solver.Algorithm;
-import solver.Heuristic;
+import solver.heuristics.value.ValueHeuristic;
+import solver.heuristics.variable.VariableHeuristic;
 
-public class ForwardChecking {
-    private List<Variable> unassignedVarList;
-    private Heuristic varOrdering, valOrdering; // val ordering always ascending
-    private Map<Integer, Integer> assignments;
-    private int searchNodeCount;
-    private int arcRevisions;
-    private BinaryCSP csp;
-    private boolean solutionFound;
+public class ForwardChecking extends Algorithm {
 
-    public List<Variable> toVariableList(BinaryCSP csp) {
-        List<Variable> varList = new ArrayList<>();
-        for (int i = 0; i < csp.getNumberVariables(); i++) {
-            List<Integer> domain = new ArrayList<>();
-            for (int j = csp.getLB(i); j <= csp.getUB(i); j++) {
-                domain.add(j);
-            }
-            varList.add(new Variable(i, domain, csp));
-        }
-        return varList;
+    public ForwardChecking(VariableHeuristic varOrdering, ValueHeuristic valOrdering, BinaryCSP csp) {
+        super(varOrdering, valOrdering, csp);
     }
 
-    public ForwardChecking(Heuristic varOrdering, Heuristic valOrdering, BinaryCSP csp) {
-        this.varOrdering = varOrdering;
-        this.valOrdering = valOrdering;
-        this.csp = csp;
-        this.searchNodeCount = 0;
-        this.arcRevisions = 0;
-        this.assignments = new HashMap();
-        this.unassignedVarList = toVariableList(csp);
-        this.solutionFound = false;
-    }
-
+    @Override
     public boolean solve() {
         forwardChecking();
         if (assignmentComplete()) {
+            printSolution();
             return true;
         }
         return false;
@@ -52,29 +28,41 @@ public class ForwardChecking {
 
     public void forwardChecking() {
         if (assignmentComplete()) {
-            printSolution();
+            // printSolution();
             // TODO don't traverse the whole search tree, stop after frist solution found
             return;
         }
         // select variable from varList (based on a heuristic?)
         Variable nextVar = getNextVar();
         // select value from var domain
-        int nextVal = nextVar.getNextVal();
+        int nextVal = nextVar.getNextVal(valOrdering);
         branchLeft(nextVar, nextVal);
+        if (assignmentComplete()) {
+            return;
+        }
         branchRight(nextVar, nextVal);
     }
 
-    public void branchLeft(Variable var, int val) {
+    public void checkComplete() {
+
+    }
+
+    public void branchLeft(Variable var, int val) { // true if solution found
         searchNodeCount++;
         // assign value
         assignments.put(var.getIndex(), val);
         unassignedVarList.remove(var);
 
-        List<Integer> currentVarDomain = var.getDomain();
+        List<Integer> currentVarDomain = var.getDomain(); //TODO maybe do a copy instead of pointer??
         // restrict domain
         var.setDomain(new ArrayList<>(List.of(val)));
 
         checkAndPrune(var);
+
+        // dont reset if finished
+        if (assignmentComplete()) {
+            return;
+        }
 
         // reset domain
         var.setDomain(currentVarDomain);
@@ -83,7 +71,7 @@ public class ForwardChecking {
         unassignedVarList.add(var);
     }
 
-    public void branchRight(Variable var, int val) {
+    public void branchRight(Variable var, int val) { // true if solution found
         searchNodeCount++;
         List<Integer> currentVarDomain = var.getDomain();
         // remove value that didn't work out on the left branch
@@ -96,7 +84,7 @@ public class ForwardChecking {
     }
 
     public void checkAndPrune(Variable var) {
-        Map<Integer, List<Integer>> currentDomains = new HashMap();
+        Map<Integer, List<Integer>> currentDomains = new HashMap<>();
         if (reviseFutureArcs(var)) {
             for (Variable v : unassignedVarList) {
                 if (!v.equals(var)) {
@@ -130,25 +118,5 @@ public class ForwardChecking {
         return true;
     }
 
-    public boolean assignmentComplete() {
-        // check if any unassigned values are left
-        if (this.assignments.size() == csp.getNumberVariables()) {
-            return true;
-        }
-        return false;
-    }
-
-    public Variable getNextVar() {
-        return varOrdering.getNext(unassignedVarList);
-
-    }
-
-    public void printSolution() {
-        // String arcAndNodes = String.format("%d\n%d\n", arcRevisions, searchNodeCount);
-        System.out.println(arcRevisions);
-        System.out.println(searchNodeCount);
-        for (Integer i : assignments.values()) {
-            System.out.println(i);
-        }
-    }
+    
 }
