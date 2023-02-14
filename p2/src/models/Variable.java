@@ -70,12 +70,22 @@ public class Variable {
         int var1 = this.index;
         int var2 = otherVar.getIndex();
 
-        Set<Integer> otherVarConsistentVals = new HashSet();
-
-        for (BinaryConstraint bc : csp.getConstraints(var1, var2)) {
-            for (BinaryTuple bt : bc.getTuples()) {
-                if (domain.contains(bt.getFirstVal())) {
-                    otherVarConsistentVals.add(bt.getSecondVal());
+        Set<Integer> otherVarConsistentVals = new HashSet<>();
+        List<BinaryConstraint> constraints = csp.getConstraints(var1, var2);
+        if (constraints.size() != 0) {
+            for (BinaryConstraint bc : csp.getConstraints(var1, var2)) {
+                for (BinaryTuple bt : bc.getTuples()) {
+                    if (domain.contains(bt.getFirstVal())) {
+                        otherVarConsistentVals.add(bt.getSecondVal());
+                    }
+                }
+            }
+        } else {
+            for (BinaryConstraint bc : csp.getConstraints(var2, var1)) {
+                for (BinaryTuple bt : bc.getTuples()) {
+                    if (domain.contains(bt.getSecondVal())) {
+                        otherVarConsistentVals.add(bt.getFirstVal());
+                    }
                 }
             }
         }
@@ -83,6 +93,7 @@ public class Variable {
     }
 
     public List<Integer> getPrunedDomain(Variable otherVar) {
+
         Set<Integer> otherVarConsistentVals = getConsistentDomain(otherVar);
         Set<Integer> intersection = new HashSet<Integer>(otherVar.getDomain()); // get the domain of otherVar (Y)
         intersection.retainAll(otherVarConsistentVals);

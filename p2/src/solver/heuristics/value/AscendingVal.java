@@ -1,5 +1,7 @@
 package solver.heuristics.value;
 
+import java.util.Collections;
+
 import models.Variable;
 
 public class AscendingVal implements ValueHeuristic {

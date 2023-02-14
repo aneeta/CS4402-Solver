@@ -1,5 +1,4 @@
 
-import solver.Solver;
 import solver.algorithms.Algorithm;
 import solver.algorithms.ForwardChecking;
 import solver.algorithms.MaintainingArcConsistency;
@@ -24,7 +23,8 @@ public class Main {
         String filePath = args[0];
         String algorithm = args[1];
         String varOrder = args[2];
-        String valOrder = args[3]; // not used, always ascending
+        String valOrder = args[3];
+        boolean allSolutions = false;
 
         // Parse input file
         BinaryCSPReader reader = new BinaryCSPReader();
@@ -46,7 +46,7 @@ public class Main {
         ValueHeuristic valHeuristic;
         if (valOrder.toLowerCase().equals("asc")) {
             valHeuristic = new AscendingVal();
-        } else if (valOrder.toLowerCase().equals("sdf")) {
+        } else if (valOrder.toLowerCase().equals("mc")) {
             valHeuristic = new MinConflicts(csp);
         } else {
             System.err.println(
@@ -57,9 +57,9 @@ public class Main {
         // map input to algorithm
         Algorithm alg;
         if (algorithm.toLowerCase().equals("fc")) {
-            alg = new ForwardChecking(varHeuristic, valHeuristic, csp);
+            alg = new ForwardChecking(varHeuristic, valHeuristic, csp, allSolutions);
         } else if (algorithm.toLowerCase().equals("mac")) {
-            alg = new MaintainingArcConsistency(varHeuristic, valHeuristic, csp);
+            alg = new MaintainingArcConsistency(varHeuristic, valHeuristic, csp, allSolutions);
         } else {
             System.err.println(
                     "Unrecognised algorithm! Choose 'fc' or 'mac'.");
