@@ -1,9 +1,11 @@
 package solver.heuristics.value;
 
+import models.Variable;
+
 public class AscendingVal implements ValueHeuristic {
 
     @Override
-    public int getNext(List<Integer> domain) {
-        return Collections.min(domain);
+    public int getNext(Variable var) {
+        return Collections.min(var.getDomain());
     }
 }

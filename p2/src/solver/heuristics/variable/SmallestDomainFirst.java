@@ -13,7 +13,7 @@ public class SmallestDomainFirst implements VariableHeuristic {
         for (Variable v : varList) {
             int domSize = v.getDomain().size();
             if ((domSize < minDomainIdx) || (domSize == minDomainIdx && nextVar.getIndex() > v.getIndex())) {
-                minDomainIdx = v.getIndex();
+                minDomainIdx = v.getDomain().size();
                 nextVar = v;
             }
         }
