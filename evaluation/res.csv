@@ -1,0 +1,41 @@
+instance,algorithm,variable_heuristic,time,nodes,arc_revisions,solution
+instances/10Queens.csp,fc,asc,.143366517,150,109,0 2 5 7 9 4 8 1 3 6
+instances/10Queens.csp,fc,sdf,.130611854,10,10,0 2 4 1 3 3 1 6 1 5
+instances/10Queens.csp,mac,asc,.161268185,50,251,0 2 5 7 9 4 8 1 3 6
+instances/10Queens.csp,mac,sdf,.161354715,146,237,0 2 5 8 6 9 3 1 4 7
+instances/4Queens.csp,fc,asc,.081777283,12,10,1 3 0 2
+instances/4Queens.csp,fc,sdf,.098780562,12,10,1 3 0 2
+instances/4Queens.csp,mac,asc,.102301818,6,18,1 3 0 2
+instances/4Queens.csp,mac,sdf,.099157681,6,18,1 3 0 2
+instances/6Queens.csp,fc,asc,.123791956,46,34,1 3 5 0 2 4
+instances/6Queens.csp,fc,sdf,.122854661,46,34,1 3 5 0 2 4
+instances/6Queens.csp,mac,asc,.123755808,18,74,1 3 5 0 2 4
+instances/6Queens.csp,mac,sdf,.104889640,20,74,1 3 5 0 2 4
+instances/8Queens.csp,fc,asc,.130097522,152,115,0 4 7 5 2 6 1 3
+instances/8Queens.csp,fc,sdf,.117409357,8,8,0 2 4 1 3 3 1 6
+instances/8Queens.csp,mac,asc,.133061271,62,226,0 4 7 5 2 6 1 3
+instances/8Queens.csp,mac,sdf,.144538066,110,242,0 4 7 5 2 6 1 3
+instances/FinnishSudoku.csp,fc,asc,71.934784888,218711,173713,8 1 2 7 5 3 6 4 9 9 4 3 6 8 2 1 7 5 6 7 5 4 9 1 2 8 3 1 5 4 2 3 7 8 9 6 3 6 9 8 4 5 7 2 1 2 8 7 1 6 9 5 3 4 5 2 1 9 7 4 3 6 8 4 3 8 5 2 6 9 1 7 7 9 6 3 1 8 4 5 2
+instances/FinnishSudoku.csp,fc,sdf,.246179420,81,81,8 1 2 3 4 5 6 7 9 3 4 3 6 1 2 4 5 7 1 7 1 2 9 2 2 3 4 2 5 2 1 3 7 4 1 3 1 3 4 1 4 5 7 1 2 1 3 6 1 2 3 4 3 5 3 1 1 3 3 2 5 6 8 4 2 8 5 1 2 3 1 4 3 9 2 3 6 4 4 2 3
+instances/FinnishSudoku.csp,mac,asc,3.347443817,5837,16645,8 1 2 7 5 3 6 4 9 9 4 3 6 8 2 1 7 5 6 7 5 4 9 1 2 8 3 1 5 4 2 3 7 8 9 6 3 6 9 8 4 5 7 2 1 2 8 7 1 6 9 5 3 4 5 2 1 9 7 4 3 6 8 4 3 8 5 2 6 9 1 7 7 9 6 3 1 8 4 5 2
+instances/FinnishSudoku.csp,mac,sdf,2.304189946,6482,10567,
+instances/langfords2_3.csp,fc,asc,.107591016,18,16,2 4 3 6 1 5
+instances/langfords2_3.csp,fc,sdf,.109753323,18,16,2 4 3 6 1 5
+instances/langfords2_3.csp,mac,asc,.119697995,10,36,2 4 3 6 1 5
+instances/langfords2_3.csp,mac,sdf,.119666168,16,39,3 5 1 4 2 6
+instances/langfords2_4.csp,fc,asc,.133869207,56,47,2 4 5 8 3 7 1 6
+instances/langfords2_4.csp,fc,sdf,.135637812,162,141,2 4 5 6 7 7 3 8
+instances/langfords2_4.csp,mac,asc,.129742264,28,85,2 4 5 8 3 7 1 6
+instances/langfords2_4.csp,mac,sdf,.130087350,42,120,5 7 1 4 2 6 3 8
+instances/langfords3_10.csp,fc,asc,6.796315030,30204,23951,1 3 5 4 7 10 19 23 27 6 11 16 14 20 26 15 22 29 9 17 25 12 21 30 8 18 28 2 13 24
+instances/langfords3_10.csp,fc,sdf,4.996397422,53712,46471,1 3 5 4 7 10 4 8 12 4 9 14 4 17 23 4 18 25 4 19 27 4 15 29 4 16 26 2 13 24
+instances/langfords3_10.csp,mac,asc,2.808580870,1196,11610,1 3 5 4 7 10 19 23 27 6 11 16 14 20 26 15 22 29 9 17 25 12 21 30 8 18 28 2 13 24
+instances/langfords3_10.csp,mac,sdf,.981000529,562,3749,
+instances/langfords3_9.csp,fc,asc,1.449088161,7045,5536,1 3 5 4 7 10 17 21 25 8 13 18 14 20 26 9 16 23 11 19 27 6 15 24 2 12 22
+instances/langfords3_9.csp,fc,sdf,.306898292,55,52,1 3 5 4 7 10 4 8 12 4 9 14 4 17 23 4 13 20 4 19 27 4 15 24 4 16 26
+instances/langfords3_9.csp,mac,asc,1.040076746,283,2791,1 3 5 4 7 10 17 21 25 8 13 18 14 20 26 9 16 23 11 19 27 6 15 24 2 12 22
+instances/langfords3_9.csp,mac,sdf,.626820110,408,2629,
+instances/SimonisSudoku.csp,fc,asc,.345744332,295,256,7 2 6 4 9 3 8 1 5 3 1 5 7 2 8 9 4 6 4 8 9 6 5 1 2 3 7 8 5 2 1 4 7 6 9 3 6 7 3 9 8 5 1 2 4 9 4 1 3 6 2 7 5 8 1 9 4 8 3 6 5 7 2 5 6 7 2 1 4 3 8 9 2 3 8 5 7 9 4 6 1
+instances/SimonisSudoku.csp,fc,sdf,.250818627,81,81,1 2 6 1 3 4 8 1 3 3 1 4 7 2 8 2 4 6 4 1 5 2 5 3 2 3 7 1 5 1 1 3 7 3 9 2 2 3 3 9 2 5 1 4 2 6 4 1 3 2 2 5 5 8 1 3 2 4 3 4 6 2 2 5 6 4 2 1 4 3 7 9 2 3 8 5 1 1 4 6 1
+instances/SimonisSudoku.csp,mac,asc,.336749702,91,376,7 2 6 4 9 3 8 1 5 3 1 5 7 2 8 9 4 6 4 8 9 6 5 1 2 3 7 8 5 2 1 4 7 6 9 3 6 7 3 9 8 5 1 2 4 9 4 1 3 6 2 7 5 8 1 9 4 8 3 6 5 7 2 5 6 7 2 1 4 3 8 9 2 3 8 5 7 9 4 6 1
+instances/SimonisSudoku.csp,mac,sdf,.437570312,142,380,

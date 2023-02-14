@@ -6,11 +6,14 @@ Practical 2: Solver for Constraint Satisfaction Problems
 ### Running the Solver
 
 ```bash
-java -cp "$(printf %s: ../../lib/*.jar)" test/*.java
+java -jar CS4402-Solver.jar <path to .csp file> <algorithm> <variable heuristic> <value heuristic>
 ```
 
-```bash
-java -cp "$(printf %s: ../../lib/*.jar)" test.TestRunner
+The valid options are:
+```
+algorithm:          fc,mac
+variable heuristic: asc,sdf
+value heuristic:    asc
 ```
 
 ### Running the tests
