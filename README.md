@@ -5,7 +5,13 @@ Practical 2: Solver for Constraint Satisfaction Problems
 
 ### Running the Solver
 
+```bash
+java -cp "$(printf %s: ../../lib/*.jar)" test/*.java
+```
 
+```bash
+java -cp "$(printf %s: ../../lib/*.jar)" test.TestRunner
+```
 
 ### Running the tests
 
