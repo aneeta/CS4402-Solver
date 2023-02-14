@@ -1,9 +1,5 @@
 package models;
 
-import java.util.List;
-
-import csp.binary.BinaryCSP;
-
 public class Arc {
     private int var1, var2;
 

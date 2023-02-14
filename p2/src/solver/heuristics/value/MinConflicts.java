@@ -15,17 +15,11 @@ public class MinConflicts implements ValueHeuristic {
 
     @Override
     public int getNext(Variable var) {
-        List<Integer> var = getIndicesNeighbours();
+        List<Integer> nextVars = var.getIndicesNeighbours();
 
         int minCount = 10 * 8;
         int retVal = -1;
-        for (int i : domain) {
-            // Count number of incompatible values
-            // in domains of future variables
-
-            // TODO
-
-        }
+        // TODO
         return retVal;
     }
 

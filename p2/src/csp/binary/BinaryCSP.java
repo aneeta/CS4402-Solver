@@ -1,17 +1,16 @@
 package csp.binary;
 
-import java.util.*;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.stream.Collectors;
 
 public final class BinaryCSP {
   private int[][] domainBounds;
   private ArrayList<BinaryConstraint> constraints;
-  private boolean solved;
 
   public BinaryCSP(int[][] db, ArrayList<BinaryConstraint> c) {
     domainBounds = db;
     constraints = c;
-    solved = false;
   }
 
   public String toString() {
