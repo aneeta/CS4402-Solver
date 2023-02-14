@@ -47,7 +47,7 @@ public class Main {
         if (valOrder.toLowerCase().equals("asc")) {
             valHeuristic = new AscendingVal();
         } else if (valOrder.toLowerCase().equals("sdf")) {
-            valHeuristic = new MinConflicts();
+            valHeuristic = new MinConflicts(csp);
         } else {
             System.err.println(
                     "Unrecognised variable ordering! Choose 'asc' or 'mc'.");
