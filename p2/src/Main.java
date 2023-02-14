@@ -1,6 +1,7 @@
 import solver.Ascending;
 import solver.Solver;
 import solver.algorithms.ForwardChecking;
+import solver.algorithms.MaintainingArcConsistency;
 import csp.binary.BinaryCSP;
 import csp.binary.BinaryCSPReader;
 
@@ -21,13 +22,16 @@ public class Main {
         BinaryCSPReader reader = new BinaryCSPReader();
         BinaryCSP csp = reader.readBinaryCSP(filePath);
 
-        ForwardChecking fc = new ForwardChecking(new Ascending(), null, csp);
-        fc.solve();
+        // ForwardChecking fc = new ForwardChecking(new Ascending(), null, csp);
+        // fc.solve();
+        MaintainingArcConsistency mac = new MaintainingArcConsistency(new Ascending(), null, csp);
+        mac.solve();
+
         // if (fc.solve()) {
-        //     String sols = fc.printSolution();
-        //     System.out.println();
+        // String sols = fc.printSolution();
+        // System.out.println();
         // } else {
-        //     System.err.println("No Solutions Found!");
+        // System.err.println("No Solutions Found!");
         // }
 
         // map

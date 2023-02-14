@@ -22,6 +22,14 @@ public class Variable {
         this.csp = csp;
     }
 
+    public List<Integer> getIndicesNeighbours() {
+        List<Integer> connected = new ArrayList<>();
+        for (BinaryConstraint bc : csp.getConstraints(index)) {
+            connected.add(bc.getSecondVar());
+        }
+        return connected;
+    }
+
     public void pruneDomain(int val) {
         this.domain.remove(Integer.valueOf(val));
     }
